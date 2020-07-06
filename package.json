@@ -1,0 +1,117 @@
+{
+    "name": "vscode-ethover",
+    "displayName": "ETHover",
+    "description": "Ethereum Account Address Hover Info and Actions",
+    "version": "0.0.1",
+    "keywords": [
+        "solidity",
+        "ethereum",
+        "etherscan",
+        "hover",
+        "address"
+    ],
+    "publisher": "tintinweb",
+    "icon": "images/ethover.png",
+    "engines": {
+        "vscode": "^1.46.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "bugs": {
+        "url": "https://github.com/ConsenSys/vscode-ethover/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ConsenSys/vscode-ethover"
+    },
+    "main": "./src/extension.js",
+    "activationEvents": [
+        "*",
+        "onCommand:etherscanio.getSource"
+    ],
+    "contributes": {
+        "languages": [
+            {
+                "id": "evmtrace",
+                "extensions": [
+                    ".evmtrace"
+                ]
+            },
+            {
+                "id": "evmbytecode",
+                "extensions": [
+                    ".evm"
+                ]
+            }
+        ],
+        "commands": [
+            {
+                "command": "vscode-ethover.account.getCode",
+                "title": "API: Get contract source for address",
+                "category": "ETHover"
+            },
+            {
+                "command": "vscode-ethover.ui.getByteCode",
+                "title": "Fetch Contract ByteCode",
+                "category": "ETHover"
+            },
+            {
+                "command": "vscode-ethover.ui.getVerifiedSource",
+                "title": "Fetch Contract Source Code",
+                "category": "ETHover"
+            },
+            {
+                "command": "vscode-ethover.ui.getDecompiledSourceCode",
+                "title": "Fetch ByteCode and decompile it",
+                "category": "ETHover"
+            },
+            {
+                "command": "vscode-ethover.ui.eveem.getDecompiledSourceCode",
+                "title": "Fetch Contract Source from eveem.org",
+                "category": "ETHover"
+            },
+            {
+                "command": "vscode-ethover.ui.evmjs.getDecompiledSourceCode",
+                "title": "Fetch ByteCode and decompile it (evm.js)",
+                "category": "ETHover"
+            },
+            {
+                "command": "vscode-ethover.ui.getDisassembledByteCode",
+                "title": "Fetch Contract Disassembly",
+                "category": "ETHover"
+            },
+            {
+                "command": "vscode-ethover.activeFile.getDisassembledByteCode",
+                "title": "Disassemble ByteCode from Active File",
+                "category": "ETHover"
+            },
+            {
+                "command": "vscode-ethover.activeFile.evmjs.getDecompiledByteCode",
+                "title": "Decompile ByteCode from Active File",
+                "category": "ETHover"
+            }
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "ETHover",
+            "properties": {
+                "vscode-ethover.address.lookupUrl": {
+                    "type": "string",
+                    "description": "Service used to lookup ethereum addresses. Note: placeholder {address}",
+                    "default": "https://etherscan.io/address/{address}"
+                },
+                "vscode-ethover.apikey": {
+                    "type": "string",
+                    "description": "Your etherscan.io API key used when fetching Contract Source or Bytecode from etherscan.io.",
+                    "default": "YourApiKeyToken"
+                }
+            }
+        }
+    },
+    "dependencies": {
+        "etherscan-api": "^10.0.5",
+        "evm": "^0.2.0",
+        "table": "^5.4.6"
+    }
+}
