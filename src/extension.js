@@ -18,12 +18,13 @@ const evmTrace = require('./features/evm');
 
 
 const DOC_SELECTOR = [
+    { language: "markdown" },
     { language: "solidity" },
     { language: "javascript" },
-    { language: "typescript" }
+    { language: "typescript" },
 ];
 
-function openEvmTrace(uri){
+function openEvmTrace(uri) {
     let fileUri = vscode.Uri.file(uri.concat('.evmtrace'));
     let evmTraceUri = fileUri.with({ scheme: 'evmtrace' });
 
@@ -52,7 +53,7 @@ function onActivate(context) {
     );
 
     context.subscriptions.push(
-        vscode.languages.registerHoverProvider({language: 'evmtrace'}, {
+        vscode.languages.registerHoverProvider({ language: 'evmtrace' }, {
             provideHover(document, position, token) {
                 return hover.provideGenericEvmTraceAsmHover(document, position, token);
             }
@@ -60,15 +61,15 @@ function onActivate(context) {
     );
 
     /* doc content provider */
-    context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider('evmtrace',  new evmTrace.EvmTraceContentProvider()));
+    context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider('evmtrace', new evmTrace.EvmTraceContentProvider()));
 
     /* commands */
 
     context.subscriptions.push(
         vscode.commands.registerCommand("vscode-ethover.ui.getByteCode", async () => {
             vscode.window.showInputBox({
-                prompt:"Ethereum Account Address",
-                placeHolder:"0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae"
+                prompt: "Ethereum Account Address",
+                placeHolder: "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae"
             }).then(address => {
                 etherscan.api.proxy.eth_getCode(address, 'latest').then(resp => {
                     vscode.workspace.openTextDocument({ content: resp.result, language: "evmbytecode" })
@@ -82,7 +83,7 @@ function onActivate(context) {
 
     context.subscriptions.push(
         vscode.commands.registerCommand("vscode-ethover.ui.getDisassembledByteCode", async (address) => {
-            if(address){
+            if (address) {
                 etherscan.api.proxy.eth_getCode(address, 'latest').then(resp => {
                     vscode.workspace.openTextDocument({ content: evmTrace.getPrintEvmDisassemblyView(resp.result), language: "evmtrace" })
                         .then(doc => vscode.window.showTextDocument(doc, vscode.ViewColumn.Beside)).then(editor => evmTrace.decorateEvmTrace(editor));
@@ -91,8 +92,8 @@ function onActivate(context) {
                 });
             } else {
                 vscode.window.showInputBox({
-                    prompt:"Ethereum Account Address",
-                    placeHolder:"0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae"
+                    prompt: "Ethereum Account Address",
+                    placeHolder: "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae"
                 }).then(address => {
                     etherscan.api.proxy.eth_getCode(address, 'latest').then(resp => {
                         vscode.workspace.openTextDocument({ content: evmTrace.getPrintEvmDisassemblyView(resp.result), language: "evmtrace" })
@@ -108,7 +109,7 @@ function onActivate(context) {
     context.subscriptions.push(
         vscode.commands.registerCommand("vscode-ethover.activeFile.getDisassembledByteCode", async () => {
             let activeEditor = vscode.window.activeTextEditor;
-            if(!activeEditor ||!activeEditor.document) return;
+            if (!activeEditor || !activeEditor.document) return;
 
             vscode.workspace.openTextDocument({ content: evmTrace.getPrintEvmDisassemblyView(activeEditor.document.getText()), language: "evmtrace" })
                 .then(doc => vscode.window.showTextDocument(doc, vscode.ViewColumn.Beside)).then(editor => evmTrace.decorateEvmTrace(editor));
@@ -117,7 +118,7 @@ function onActivate(context) {
 
     context.subscriptions.push(
         vscode.commands.registerCommand("vscode-ethover.ui.evmjs.getDecompiledSourceCode", async (address) => {
-            if(address){
+            if (address) {
                 etherscan.api.proxy.eth_getCode(address, 'latest').then(resp => {
                     vscode.workspace.openTextDocument({ content: evmTrace.getDecompiledByteCode(resp.result), language: "solidity" })
                         .then(doc => vscode.window.showTextDocument(doc, vscode.ViewColumn.Beside));
@@ -126,8 +127,8 @@ function onActivate(context) {
                 });
             } else {
                 vscode.window.showInputBox({
-                    prompt:"Ethereum Account Address",
-                    placeHolder:"0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae"
+                    prompt: "Ethereum Account Address",
+                    placeHolder: "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae"
                 }).then(address => {
                     etherscan.api.proxy.eth_getCode(address, 'latest').then(resp => {
                         vscode.workspace.openTextDocument({ content: evmTrace.getDecompiledByteCode(resp.result), language: "solidity" })
@@ -144,7 +145,7 @@ function onActivate(context) {
     context.subscriptions.push(
         vscode.commands.registerCommand("vscode-ethover.activeFile.evmjs.getDecompiledByteCode", async () => {
             let activeEditor = vscode.window.activeTextEditor;
-            if(!activeEditor ||!activeEditor.document) return;
+            if (!activeEditor || !activeEditor.document) return;
 
             vscode.workspace.openTextDocument({ content: evmTrace.getDecompiledByteCode(activeEditor.document.getText()), language: "solidity" })
                 .then(doc => vscode.window.showTextDocument(doc, vscode.ViewColumn.Beside));
@@ -154,8 +155,8 @@ function onActivate(context) {
     context.subscriptions.push(
         vscode.commands.registerCommand("vscode-ethover.ui.getVerifiedSource", async () => {
             vscode.window.showInputBox({
-                prompt:"Ethereum Account Address",
-                placeHolder:"0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae"
+                prompt: "Ethereum Account Address",
+                placeHolder: "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae"
             }).then(address => {
                 etherscan.getVerifiedSource(address)
                     .then(content => {
@@ -172,8 +173,8 @@ function onActivate(context) {
     context.subscriptions.push(
         vscode.commands.registerCommand("vscode-ethover.ui.getDecompiledSourceCode", async () => {
             vscode.window.showInputBox({
-                prompt:"Ethereum Account Address",
-                placeHolder:"0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae"
+                prompt: "Ethereum Account Address",
+                placeHolder: "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae"
             }).then(address => {
                 etherscan.api.proxy.eth_getCode(address, 'latest').then(resp => {
                     vscode.commands.executeCommand("vscode-decompiler.decompileShowContent", `${address}.evm`, resp.result)
@@ -189,32 +190,32 @@ function onActivate(context) {
 
     context.subscriptions.push(
         vscode.commands.registerCommand("vscode-ethover.ui.eveem.getDecompiledSourceCode", async (address) => {
-            if(address){
+            if (address) {
                 eveem.eveemGetDecompiledSource(address).then(resp => {
                     vscode.workspace.openTextDocument({ content: resp, language: "python" })
                         .then(doc => vscode.window.showTextDocument(doc, vscode.ViewColumn.Beside));
                 })
-                .catch(err => {
-                    vscode.window.showWarningMessage(err.message);
-                });
+                    .catch(err => {
+                        vscode.window.showWarningMessage(err.message);
+                    });
             } else {
                 vscode.window.showInputBox({
-                    prompt:"Ethereum Account Address",
-                    placeHolder:"0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae"
+                    prompt: "Ethereum Account Address",
+                    placeHolder: "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae"
                 }).then(address => {
                     eveem.eveemGetDecompiledSource(address).then(resp => {
                         vscode.workspace.openTextDocument({ content: resp, language: "python" })
                             .then(doc => vscode.window.showTextDocument(doc, vscode.ViewColumn.Beside));
                     })
-                    .catch(err => {
-                        vscode.window.showWarningMessage(err.message);
-                    });
+                        .catch(err => {
+                            vscode.window.showWarningMessage(err.message);
+                        });
                 });
             }
         })
     );
 
-    
+
 
     context.subscriptions.push(
         vscode.commands.registerCommand("vscode-ethover.account.getCode", async (args) => {
@@ -260,23 +261,23 @@ function onActivate(context) {
 
     vscode.workspace.onDidChangeTextDocument(e => {
         if (e && e.document) {
-            if(e.document.uri.scheme === 'evmtrace' || e.document.languageId=='evmtrace'){
+            if (e.document.uri.scheme === 'evmtrace' || e.document.languageId == 'evmtrace') {
                 evmTrace.decorateEvmTrace(activeEditor);
-            } else if (e.document.uri.scheme === 'evmbytecode' || e.document.languageId=='evmbytecode'){
+            } else if (e.document.uri.scheme === 'evmbytecode' || e.document.languageId == 'evmbytecode') {
                 evmTrace.decorateEvmByteCode(activeEditor);
-            } 
+            }
         }
-    },  null, context.subscriptions);
+    }, null, context.subscriptions);
 
     vscode.window.onDidChangeActiveTextEditor(e => {
         if (e && e.document) {
-            if(e.document.uri.scheme === 'evmtrace' || e.document.languageId=='evmtrace'){
+            if (e.document.uri.scheme === 'evmtrace' || e.document.languageId == 'evmtrace') {
                 activeEditor = e;
                 evmTrace.decorateEvmTrace(e);
-            } else if (e.document.uri.scheme === 'evmbytecode' || e.document.languageId=='evmbytecode'){
+            } else if (e.document.uri.scheme === 'evmbytecode' || e.document.languageId == 'evmbytecode') {
                 activeEditor = e;
                 evmTrace.decorateEvmByteCode(e);
-            } 
+            }
         }
     }, null, context.subscriptions);
 
@@ -284,11 +285,11 @@ function onActivate(context) {
         if (!e || !e.textEditor || !e.selections) {
             return;
         }
-        if (e.textEditor.document.uri.scheme === 'evmbytecode' || e.textEditor.document.languageId=='evmbytecode'){
+        if (e.textEditor.document.uri.scheme === 'evmbytecode' || e.textEditor.document.languageId == 'evmbytecode') {
             activeEditor = e.textEditor;
             evmTrace.decorateEvmByteCodeSelection(e.textEditor, e.selections[0].anchor);
-        } 
-        
+        }
+
     }, null, context.subscriptions);
 }
 

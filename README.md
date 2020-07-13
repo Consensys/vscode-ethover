@@ -29,6 +29,14 @@ Hover over an ethereum address and:
 * Show reconstructed contract source from [evm.js](https://www.npmjs.com/package/evm)
 * run [vscode-decompiler](https://marketplace.visualstudio.com/items?itemName=tintinweb.vscode-decompiler) to decompile it manually using panoramix (eveem.org) locally
 
+### Currently enabled for the following filetypes
+
+* TypeScript
+* JavaScript
+* Markdown
+* Solidity
+
+Let me know if you want to enable this extension for more filetypes.
 
 ## Credits
 

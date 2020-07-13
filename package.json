@@ -2,7 +2,7 @@
     "name": "vscode-ethover",
     "displayName": "ETHover",
     "description": "Ethereum Account Address Hover Info and Actions",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "keywords": [
         "solidity",
         "ethereum",
@@ -27,8 +27,21 @@
     },
     "main": "./src/extension.js",
     "activationEvents": [
-        "*",
-        "onCommand:etherscanio.getSource"
+        "onLanguage:solidity",
+        "onLanguage:typescript",
+        "onLanguage:javascript",
+        "onLanguage:solidity",
+        "onLanguage:evmtrace",
+        "onLanguage:evmbytecode",
+        "onCommand:vscode-ethover.account.getCode",
+        "onCommand:vscode-ethover.ui.getByteCode",
+        "onCommand:vscode-ethover.ui.getVerifiedSource",
+        "onCommand:vscode-ethover.ui.getDecompiledSourceCode",
+        "onCommand:vscode-ethover.ui.eveem.getDecompiledSourceCode",
+        "onCommand:vscode-ethover.ui.evmjs.getDecompiledSourceCode",
+        "onCommand:vscode-ethover.ui.getDisassembledByteCode",
+        "onCommand:vscode-ethover.activeFile.getDisassembledByteCode",
+        "onCommand:vscode-ethover.activeFile.evmjs.getDecompiledByteCode"
     ],
     "contributes": {
         "languages": [
