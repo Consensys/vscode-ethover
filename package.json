@@ -2,13 +2,16 @@
     "name": "vscode-ethover",
     "displayName": "ETHover",
     "description": "Ethereum Account Address Hover Info and Actions",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "keywords": [
         "solidity",
         "ethereum",
         "etherscan",
         "hover",
-        "address"
+        "address",
+        "disassembler",
+        "decompiler",
+        "evm"
     ],
     "publisher": "tintinweb",
     "icon": "images/ethover.png",
@@ -118,6 +121,12 @@
                     "type": "string",
                     "description": "Your etherscan.io API key used when fetching Contract Source or Bytecode from etherscan.io.",
                     "default": "YourApiKeyToken"
+                },
+                "vscode-ethover.hover.getBalance": {
+                    "type": "string",
+                    "enum": ["yes", "no", "yes-ask"],
+                    "description": "Fetch mainnet balance from etherscan.io? (Note: might require a valid ApiKey)",
+                    "default": "yes-ask"
                 }
             }
         }
