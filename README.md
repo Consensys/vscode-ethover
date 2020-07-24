@@ -5,7 +5,7 @@
 
 
 
-# VSCode ETHover
+# ETHover
 
 Ethereum Account Address Hover Info and Actions
 
