@@ -8,7 +8,10 @@
         "ethereum",
         "etherscan",
         "hover",
-        "address"
+        "address",
+        "disassembler",
+        "decompiler",
+        "evm"
     ],
     "publisher": "tintinweb",
     "icon": "images/ethover.png",
