@@ -57,6 +57,12 @@ function provideAddressActionHover(document, position, token) {
 }
 
 async function provideBalanceHover(document, position, token, etherscan) {
+
+    let hoverEnabled = settings.extensionConfig().hover.getBalance;
+
+    if(hoverEnabled=="no"){
+        return;
+    }
     
     let word = editorGetAddressWordAtPosition(document, position, token);
     if(!word){
@@ -77,6 +83,10 @@ async function provideBalanceHover(document, position, token, etherscan) {
         
     } catch(e) {
         addressHover = `💰 **N/A** Ether (\`${e}\`)`;
+    }
+
+    if(hoverEnabled=="yes-ask"){
+        addressHover += `  ([settings](${makeCommandUri('workbench.action.openSettings', `vscode-ethover.hover.getBalance`)}))`;
     }
     
 
