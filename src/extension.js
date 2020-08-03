@@ -75,7 +75,7 @@ function onActivate(context) {
                     vscode.workspace.openTextDocument({ content: resp.result, language: "evmbytecode" })
                         .then(doc => vscode.window.showTextDocument(doc, vscode.ViewColumn.Beside));
                 }).catch(err => {
-                    vscode.window.showWarningMessage(err.message);
+                    vscode.window.showWarningMessage(err);
                 });
             });
         })
@@ -155,7 +155,11 @@ function onActivate(context) {
                         vscode.workspace.openTextDocument({ content: evmTrace.getDecompiledByteCode(resp.result), language: "solidity" })
                             .then(doc => vscode.window.showTextDocument(doc, vscode.ViewColumn.Beside));
                     }).catch(err => {
-                        vscode.window.showErrorMessage(`Decompiler returned error: ${err.message}`);
+                        if(err.message){
+                            vscode.window.showErrorMessage(`Decompiler returned error: ${err.message}`);
+                        } else {
+                            vscode.window.showWarningMessage(err);
+                        }
                     });
                 } else {
                     progress.report({ increment: 5, message:"awaiting user input" });
@@ -169,7 +173,11 @@ function onActivate(context) {
                             vscode.workspace.openTextDocument({ content: evmTrace.getDecompiledByteCode(resp.result), language: "solidity" })
                                 .then(doc => vscode.window.showTextDocument(doc, vscode.ViewColumn.Beside));
                         }).catch(err => {
-                            vscode.window.showWarningMessage(err.message);
+                            if(err.message){
+                                vscode.window.showErrorMessage(`Decompiler returned error: ${err.message}`);
+                            } else {
+                                vscode.window.showWarningMessage(err);
+                            }
                         });
                     });
                 }
@@ -321,8 +329,6 @@ function onActivate(context) {
                             });
                         break;
                 }
-
-
             });
         })
     );
