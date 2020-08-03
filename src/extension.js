@@ -75,7 +75,7 @@ function onActivate(context) {
                     vscode.workspace.openTextDocument({ content: resp.result, language: "evmbytecode" })
                         .then(doc => vscode.window.showTextDocument(doc, vscode.ViewColumn.Beside));
                 }).catch(err => {
-                    vscode.window.showWarningMessage(err.message);
+                    vscode.window.showWarningMessage(err);
                 });
             });
         })
@@ -83,26 +83,44 @@ function onActivate(context) {
 
     context.subscriptions.push(
         vscode.commands.registerCommand("vscode-ethover.ui.getDisassembledByteCode", async (address) => {
-            if (address) {
-                etherscan.api.proxy.eth_getCode(address, 'latest').then(resp => {
-                    vscode.workspace.openTextDocument({ content: evmTrace.getPrintEvmDisassemblyView(resp.result), language: "evmtrace" })
-                        .then(doc => vscode.window.showTextDocument(doc, vscode.ViewColumn.Beside)).then(editor => evmTrace.decorateEvmTrace(editor));
-                }).catch(err => {
-                    vscode.window.showWarningMessage(err);
+
+            vscode.window.withProgress({
+                location: vscode.ProgressLocation.Notification,
+                title: `ETHover: disassembling ...`,
+                cancellable: false
+            }, async (progress, token) => {
+                token.onCancellationRequested(() => {
+                    console.log("User canceled the long running operation");
                 });
-            } else {
-                vscode.window.showInputBox({
-                    prompt: "Ethereum Account Address",
-                    placeHolder: "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae"
-                }).then(address => {
-                    etherscan.api.proxy.eth_getCode(address, 'latest').then(resp => {
+
+                progress.report({ increment: 10 });
+
+                if (address) {
+                    await etherscan.api.proxy.eth_getCode(address, 'latest').then(resp => {
+                        progress.report({ increment: 20 });
                         vscode.workspace.openTextDocument({ content: evmTrace.getPrintEvmDisassemblyView(resp.result), language: "evmtrace" })
-                            .then(doc => vscode.window.showTextDocument(doc, vscode.ViewColumn.Beside));
+                            .then(doc => vscode.window.showTextDocument(doc, vscode.ViewColumn.Beside)).then(editor => evmTrace.decorateEvmTrace(editor));
                     }).catch(err => {
                         vscode.window.showWarningMessage(err);
                     });
-                });
-            }
+                } else {
+                    progress.report({ increment: 10, message:"awaiting user input" });
+                    await vscode.window.showInputBox({
+                        prompt: "Ethereum Account Address",
+                        placeHolder: "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae"
+                    }).then(address => {
+                        progress.report({ increment: 10, message:"fetching bytecode" });
+                        etherscan.api.proxy.eth_getCode(address, 'latest').then(resp => {
+                            progress.report({ increment: 20, message:"" });
+                            vscode.workspace.openTextDocument({ content: evmTrace.getPrintEvmDisassemblyView(resp.result), language: "evmtrace" })
+                                .then(doc => vscode.window.showTextDocument(doc, vscode.ViewColumn.Beside));
+                        }).catch(err => {
+                            vscode.window.showWarningMessage(err);
+                        });
+                    });
+                }
+
+            });
         })
     );
 
@@ -118,26 +136,53 @@ function onActivate(context) {
 
     context.subscriptions.push(
         vscode.commands.registerCommand("vscode-ethover.ui.evmjs.getDecompiledSourceCode", async (address) => {
-            if (address) {
-                etherscan.api.proxy.eth_getCode(address, 'latest').then(resp => {
-                    vscode.workspace.openTextDocument({ content: evmTrace.getDecompiledByteCode(resp.result), language: "solidity" })
-                        .then(doc => vscode.window.showTextDocument(doc, vscode.ViewColumn.Beside));
-                }).catch(err => {
-                    vscode.window.showWarningMessage(err);
+
+            vscode.window.withProgress({
+                location: vscode.ProgressLocation.Notification,
+                title: `ETHover: decompiling ...`,
+                cancellable: false
+            }, async (progress, token) => {
+                token.onCancellationRequested(() => {
+                    console.log("User canceled the long running operation");
                 });
-            } else {
-                vscode.window.showInputBox({
-                    prompt: "Ethereum Account Address",
-                    placeHolder: "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae"
-                }).then(address => {
-                    etherscan.api.proxy.eth_getCode(address, 'latest').then(resp => {
+
+                progress.report({ increment: 10 });
+
+                if (address) {
+                    progress.report({ increment: 10 });
+                    await etherscan.api.proxy.eth_getCode(address, 'latest').then(resp => {
+                        progress.report({ increment: 20 });
                         vscode.workspace.openTextDocument({ content: evmTrace.getDecompiledByteCode(resp.result), language: "solidity" })
                             .then(doc => vscode.window.showTextDocument(doc, vscode.ViewColumn.Beside));
                     }).catch(err => {
-                        vscode.window.showWarningMessage(err);
+                        if(err.message){
+                            vscode.window.showErrorMessage(`Decompiler returned error: ${err.message}`);
+                        } else {
+                            vscode.window.showWarningMessage(err);
+                        }
                     });
-                });
-            }
+                } else {
+                    progress.report({ increment: 5, message:"awaiting user input" });
+                    await vscode.window.showInputBox({
+                        prompt: "Ethereum Account Address",
+                        placeHolder: "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae"
+                    }).then(address => {
+                        progress.report({ increment: 10, message:"fetching bytecode" });
+                        etherscan.api.proxy.eth_getCode(address, 'latest').then(resp => {
+                            progress.report({ increment: 10, message:"" });
+                            vscode.workspace.openTextDocument({ content: evmTrace.getDecompiledByteCode(resp.result), language: "solidity" })
+                                .then(doc => vscode.window.showTextDocument(doc, vscode.ViewColumn.Beside));
+                        }).catch(err => {
+                            if(err.message){
+                                vscode.window.showErrorMessage(`Decompiler returned error: ${err.message}`);
+                            } else {
+                                vscode.window.showWarningMessage(err);
+                            }
+                        });
+                    });
+                }
+
+            });
         })
     );
 
@@ -190,28 +235,45 @@ function onActivate(context) {
 
     context.subscriptions.push(
         vscode.commands.registerCommand("vscode-ethover.ui.eveem.getDecompiledSourceCode", async (address) => {
-            if (address) {
-                eveem.eveemGetDecompiledSource(address).then(resp => {
-                    vscode.workspace.openTextDocument({ content: resp, language: "python" })
-                        .then(doc => vscode.window.showTextDocument(doc, vscode.ViewColumn.Beside));
-                })
-                    .catch(err => {
-                        vscode.window.showWarningMessage(err.message);
-                    });
-            } else {
-                vscode.window.showInputBox({
-                    prompt: "Ethereum Account Address",
-                    placeHolder: "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae"
-                }).then(address => {
-                    eveem.eveemGetDecompiledSource(address).then(resp => {
+
+            vscode.window.withProgress({
+                location: vscode.ProgressLocation.Notification,
+                title: `ETHover: fetching contract from eveem.org ...`,
+                cancellable: false
+            }, async (progress, token) => {
+                token.onCancellationRequested(() => {
+                    console.log("User canceled the long running operation");
+                });
+
+                progress.report({ increment: 10 });
+
+                if (address) {
+                    await eveem.eveemGetDecompiledSource(address).then(resp => {
+                        progress.report({ increment: 20 });
                         vscode.workspace.openTextDocument({ content: resp, language: "python" })
                             .then(doc => vscode.window.showTextDocument(doc, vscode.ViewColumn.Beside));
                     })
                         .catch(err => {
                             vscode.window.showWarningMessage(err.message);
                         });
-                });
-            }
+                } else {
+                    progress.report({ increment: 10, message:"awaiting user input" });
+                    vscode.window.showInputBox({
+                        prompt: "Ethereum Account Address",
+                        placeHolder: "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae"
+                    }).then(address => {
+                        progress.report({ increment: 10, message:"fetching source" });
+                        eveem.eveemGetDecompiledSource(address).then(resp => {
+                            progress.report({ increment: 20, message:"" });
+                            vscode.workspace.openTextDocument({ content: resp, language: "python" })
+                                .then(doc => vscode.window.showTextDocument(doc, vscode.ViewColumn.Beside));
+                        }).catch(err => {
+                            vscode.window.showWarningMessage(err.message);
+                        });
+                    });
+                }
+
+            });
         })
     );
 
@@ -222,36 +284,52 @@ function onActivate(context) {
             if (!args) {
                 return;
             }
-            switch (args.type) {
-                case 'byteCode':
-                    etherscan.api.proxy.eth_getCode(args.address, 'latest').then(resp => {
-                        vscode.workspace.openTextDocument({ content: resp.result, language: "evmbytecode" })
-                            .then(doc => vscode.window.showTextDocument(doc, vscode.ViewColumn.Beside));
-                    }).catch(err => {
-                        vscode.window.showWarningMessage(err);
-                    });
-                    break;
-                case 'byteCodeDecompiled':
-                    etherscan.api.proxy.eth_getCode(args.address, 'latest').then(resp => {
-                        vscode.commands.executeCommand("vscode-decompiler.decompileShowContent", `${args.address}.evm`, resp.result)
-                            .catch(err => {
-                                vscode.window.showWarningMessage(`Please install and configure 'tintinweb.vscode-decompiler' to use this feature.`);
-                            });
-                    }).catch(err => {
-                        vscode.window.showWarningMessage(err);
-                    });
-                    break;
-                case 'sourceCode':
-                    etherscan.getVerifiedSource(args.address)
-                        .then(content => {
-                            vscode.workspace.openTextDocument({ content: content, language: "solidity" })
+
+            vscode.window.withProgress({
+                location: vscode.ProgressLocation.Notification,
+                title: `ETHover: fetching contract ...`,
+                cancellable: false
+            }, async (progress, token) => {
+                token.onCancellationRequested(() => {
+                    console.log("User canceled the long running operation");
+                });
+
+                progress.report({ increment: 10, message:args.type });
+
+                switch (args.type) {
+                    case 'byteCode':
+                        await etherscan.api.proxy.eth_getCode(args.address, 'latest').then(resp => {
+                            progress.report({ increment: 20 });
+                            vscode.workspace.openTextDocument({ content: resp.result, language: "evmbytecode" })
                                 .then(doc => vscode.window.showTextDocument(doc, vscode.ViewColumn.Beside));
-                        })
-                        .catch(err => {
-                            vscode.window.showWarningMessage(err.message);
+                        }).catch(err => {
+                            vscode.window.showWarningMessage(err);
                         });
-                    break;
-            }
+                        break;
+                    case 'byteCodeDecompiled':
+                        await etherscan.api.proxy.eth_getCode(args.address, 'latest').then(resp => {
+                            progress.report({ increment: 20 });
+                            vscode.commands.executeCommand("vscode-decompiler.decompileShowContent", `${args.address}.evm`, resp.result)
+                                .catch(err => {
+                                    vscode.window.showWarningMessage(`Please install and configure 'tintinweb.vscode-decompiler' to use this feature.`);
+                                });
+                        }).catch(err => {
+                            vscode.window.showWarningMessage(err);
+                        });
+                        break;
+                    case 'sourceCode':
+                        await etherscan.getVerifiedSource(args.address)
+                            .then(content => {
+                                progress.report({ increment: 20 });
+                                vscode.workspace.openTextDocument({ content: content, language: "solidity" })
+                                    .then(doc => vscode.window.showTextDocument(doc, vscode.ViewColumn.Beside));
+                            })
+                            .catch(err => {
+                                vscode.window.showWarningMessage(err.message);
+                            });
+                        break;
+                }
+            });
         })
     );
 
