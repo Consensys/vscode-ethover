@@ -2,7 +2,7 @@
     "name": "vscode-ethover",
     "displayName": "ETHover",
     "description": "Ethereum Account Address Hover Info and Actions",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "keywords": [
         "solidity",
         "ethereum",
@@ -33,7 +33,8 @@
         "onLanguage:solidity",
         "onLanguage:typescript",
         "onLanguage:javascript",
-        "onLanguage:solidity",
+        "onLanguage:markdown",
+        "onLanguage:python",
         "onLanguage:evmtrace",
         "onLanguage:evmbytecode",
         "onCommand:vscode-ethover.account.getCode",

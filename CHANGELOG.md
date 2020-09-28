@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.0.6
+- new: enable ethover for python files - #5
+
 ## 0.0.5
 - improve UI, show progress, fix error messages - #2
 

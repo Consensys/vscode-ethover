@@ -22,6 +22,7 @@ const DOC_SELECTOR = [
     { language: "solidity" },
     { language: "javascript" },
     { language: "typescript" },
+    { language: "python" },
 ];
 
 function openEvmTrace(uri) {
