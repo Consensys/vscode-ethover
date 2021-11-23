@@ -10,10 +10,50 @@ const vscode = require('vscode');
 const settings = require('../settings');
 const asmArr = require('./hover/asm.json');
 const {TimeoutCache, makeCommandUri} = require('./utils');
+const { EtherScanIo } = require('./etherscan');
 
 const ADDRESS_STRING_SIZE = 42;  //0x{40} = 42
 const ONE_ETH = 10**18;
 const CACHE = new TimeoutCache(30*1000); //30sek cache
+
+
+const chainConfigDefault = {
+    "mainnet": {
+        "name": "Mainnet",
+        "enabled": true,
+        "apiurl": "https://api.etherscan.io/api",
+        "apikey": "YourApiKeyToken",
+        "url": "https://etherscan.io/address/{address}"
+    },
+    "ropsten": {
+        "name": "Ropsten",
+        "enabled": true,
+        "apiurl": "https://api-ropsten.etherscan.io/api",
+        "apikey": "YourApiKeyToken",
+        "url": "https://etherscan.io/address/{address}"
+    },
+    "kovan": {
+        "name": "Kovan",
+        "enabled": true,
+        "apiurl": "https://api-kovan.etherscan.io/api",
+        "apikey": "YourApiKeyToken",
+        "url": "https://kovan.etherscan.io/address/{address}"
+    },
+    "rinkeby": {
+        "name": "Rinkeby",
+        "enabled": true,
+        "apiurl": "https://api-rinkeby.etherscan.io/api",
+        "apikey": "YourApiKeyToken",
+        "url": "https://rinkeby.etherscan.io/address/{address}"
+    },
+    "polygon": {
+        "name": "Polygon",
+        "enabled": true,
+        "apiurl": "https://api-polygon.etherscan.io/api",
+        "apikey": "YourApiKeyToken",
+        "url": "https://polygonscan.com/address/{address}"
+    }
+}
 
 
 function editorGetAddressWordAtPosition(document, position, token){
@@ -42,7 +82,7 @@ function provideAddressActionHover(document, position, token) {
         return;
     }
 
-    let addressHover = `🌎 [Open](${settings.extensionConfig().address.lookupUrl.replace("{address}",word)})
+    let addressHover = `🌎  [Bloxy.info](https://bloxy.info/address/${word})
     |  [ByteCode](${makeCommandUri("vscode-ethover.account.getCode",{address:word, type:"byteCode"})})
     |  [Disassemble](${makeCommandUri("vscode-ethover.ui.getDisassembledByteCode",[word])})
     |  [VerifiedContract](${makeCommandUri("vscode-ethover.account.getCode",{address:word, type:"sourceCode"})})
@@ -56,41 +96,59 @@ function provideAddressActionHover(document, position, token) {
     return new vscode.Hover(contents);
 }
 
-async function provideBalanceHover(document, position, token, etherscan) {
 
-    let hoverEnabled = settings.extensionConfig().hover.getBalance;
+
+async function provideBalanceHover(document, position, token) {
+
+    
+
+    const hoverEnabled = settings.extensionConfig().hover.getBalance;
 
     if(hoverEnabled=="no"){
         return;
     }
     
-    let word = editorGetAddressWordAtPosition(document, position, token);
-    if(!word){
+    let address = editorGetAddressWordAtPosition(document, position, token);
+    if(!address){
         return;
     }
 
-    let addressHover;
 
-    let balance = CACHE.get('balance', word);
+    const chainConfig = {...chainConfigDefault, ...settings.extensionConfig().chain.config}; //merge default and user config
 
+    let addressHover = [];
+    let errors = [];
+    let totalBalance = 0;
 
-    try {
-        if(!balance){
-            balance = await etherscan.api.account.balance(word);
-            CACHE.set('balance', word, balance);
+    for(let cconf of Object.values(chainConfig)){
+        if(!cconf.enabled){
+            continue;
         }
-        addressHover = `💰 **${(balance.result/ONE_ETH).toFixed(2)}** Ether (mainnet)`;
-        
-    } catch(e) {
-        addressHover = `💰 **N/A** Ether (\`${e}\`)`;
+        let balance = CACHE.get(`balance_${cconf.name}`, address);
+        //cconf.name, enabled
+
+        try {
+            if(!balance){
+                let etherscan = new EtherScanIo(cconf.apiKey, cconf.apiurl);
+
+                balance = await etherscan.api.account.balance(address);
+                CACHE.set(`balance_${cconf.name}`, address, balance);
+            }
+            addressHover.push(`([${cconf.name}](${cconf.url.replace("{address}",address)}))`);
+            totalBalance += balance.result;
+        } catch(e) {
+            errors.push(`Error: ${cconf.name} (\`${e}\`)`);
+        }
     }
 
+    addressHover.unshift(`∑ 💰 **${(totalBalance/ONE_ETH).toFixed(2)}** Ether `)
+
     if(hoverEnabled=="yes-ask"){
-        addressHover += `  ([settings](${makeCommandUri('workbench.action.openSettings', `vscode-ethover.hover.getBalance`)}))`;
+        addressHover.push(` |  ([settings](${makeCommandUri('workbench.action.openSettings', `vscode-ethover.hover.getBalance`)}))`);
     }
     
 
-    const contents = new vscode.MarkdownString(addressHover);
+    const contents = new vscode.MarkdownString(addressHover.join(''));
     contents.isTrusted = true;
     return new vscode.Hover(contents);
 }

@@ -2,7 +2,7 @@
     "name": "vscode-ethover",
     "displayName": "ETHover",
     "description": "Ethereum Account Address Hover Info and Actions",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "keywords": [
         "solidity",
         "ethereum",
@@ -113,12 +113,12 @@
             "type": "object",
             "title": "ETHover",
             "properties": {
-                "vscode-ethover.address.lookupUrl": {
+                "vscode-ethover.default.apiurl": {
                     "type": "string",
-                    "description": "Service used to lookup ethereum addresses. Note: placeholder {address}",
-                    "default": "https://etherscan.io/address/{address}"
+                    "description": "The etherscan.io API endpoint to use.",
+                    "default": "https://api.etherscan.io/api"
                 },
-                "vscode-ethover.apikey": {
+                "vscode-ethover.default.apikey": {
                     "type": "string",
                     "description": "Your etherscan.io API key used when fetching Contract Source or Bytecode from etherscan.io.",
                     "default": "YourApiKeyToken"
@@ -128,7 +128,51 @@
                     "enum": ["yes", "no", "yes-ask"],
                     "description": "Fetch mainnet balance from etherscan.io? (Note: might require a valid ApiKey)",
                     "default": "yes-ask"
+                },
+                "vscode-ethover.chain.config": {
+                    "type": "object",
+                    "description": "Multi-Chain Network Configuration. See `package.json - vscode-ethover.chain.config` for how to customize.",
+                    "properties": {},
+                    "default": {
+                        "mainnet": {
+                            "name": "Mainnet",
+                            "enabled": true,
+                            "apiurl": "https://api.etherscan.io/api",
+                            "apikey": "YourApiKeyToken",
+                            "url": "https://etherscan.io/address/{address}"
+                        },
+                        "ropsten": {
+                            "name": "Ropsten",
+                            "enabled": true,
+                            "apiurl": "https://api-ropsten.etherscan.io/api",
+                            "apikey": "YourApiKeyToken",
+                            "url": "https://etherscan.io/address/{address}"
+                        },
+                        "kovan": {
+                            "name": "Kovan",
+                            "enabled": true,
+                            "apiurl": "https://api-kovan.etherscan.io/api",
+                            "apikey": "YourApiKeyToken",
+                            "url": "https://kovan.etherscan.io/address/{address}"
+                        },
+                        "rinkeby": {
+                            "name": "Rinkeby",
+                            "enabled": true,
+                            "apiurl": "https://api-rinkeby.etherscan.io/api",
+                            "apikey": "YourApiKeyToken",
+                            "url": "https://rinkeby.etherscan.io/address/{address}"
+                        },
+                        "polygon": {
+                            "name": "Polygon",
+                            "enabled": true,
+                            "apiurl": "https://api-polygon.etherscan.io/api",
+                            "apikey": "YourApiKeyToken",
+                            "url": "https://polygonscan.com/address/{address}"
+                        }
+                        
+                    }
                 }
+                
             }
         }
     },
