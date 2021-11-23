@@ -138,7 +138,7 @@ async function provideBalanceHover(document, position, token) {
                 }
                 CACHE.set(`balance_${cconf.name}`, address, balance);
             }
-            addressHover.push(`([${cconf.name}](${cconf.url.replace("{address}",address)}))`);
+            addressHover.push(`(${balance >0 ? '•' : ''}[${cconf.name}](${cconf.url.replace("{address}",address)}))`);
             totalBalance += balance;
         } catch(e) {
             errors.push(`Error: ${cconf.name} (\`${e}\`)`);
