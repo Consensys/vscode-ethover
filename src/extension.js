@@ -35,7 +35,7 @@ function openEvmTrace(uri) {
 /** event funcs */
 function onActivate(context) {
 
-    const etherscan = new EtherScanIo(settings.extensionConfig().apikey);
+    const etherscan = new EtherScanIo(settings.extensionConfig().default.apikey, settings.extensionConfig().default.apiurl);
 
     context.subscriptions.push(
         vscode.languages.registerHoverProvider(DOC_SELECTOR, {
@@ -48,7 +48,7 @@ function onActivate(context) {
     context.subscriptions.push(
         vscode.languages.registerHoverProvider(DOC_SELECTOR, {
             provideHover(document, position, token) {
-                return hover.provideBalanceHover(document, position, token, etherscan);
+                return hover.provideBalanceHover(document, position, token);
             }
         })
     );

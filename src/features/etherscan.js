@@ -10,7 +10,8 @@ const http = require('https');
 
 class EtherScanIoConnector {
 
-    constructor(apikey) {
+    constructor(apikey, apiurl) {
+        this.apiurl = apiurl || "https://api.etherscan.io/api";
         this.apikey = apikey;
     }
 
@@ -22,9 +23,13 @@ class EtherScanIoConnector {
         return this.etherscanRequest("module=proxy&action=eth_getCode&tag=latest&address=" + address);
     }
 
+    balanceForAddress(address) {
+        return this.etherscanRequest("module=account&action=balance&address=" + address + "&tag=latest");
+    }
+
     etherscanRequest(cmd) {
         return new Promise((resolve, reject) => {
-            http.get(`https://api.etherscan.io/api?apikey=${this.apikey}&${cmd}`, (res) => {
+            http.get(`${this.apiurl}?apikey=${this.apikey}&${cmd}`, (res) => {
                 const { statusCode } = res;
                 const contentType = res.headers['content-type'];
 
@@ -69,8 +74,8 @@ class EtherScanIoConnector {
 
 class EtherScanIo extends EtherScanIoConnector {
 
-    constructor(apikey) {
-        super(apikey);
+    constructor(apikey, apiurl) {
+        super(apikey, apiurl);
         this.apikey = apikey || 'YourApiKeyToken';
         this.api = require('etherscan-api').init(this.apikey);
     }

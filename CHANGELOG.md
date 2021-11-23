@@ -1,5 +1,19 @@
 # Change Log
 
+## 0.0.7
+- new: Multi-Chain support - #8
+  - new setting `vscode-ethover.chain.config` (object). defaults see `package.json`. add new custom chain/network configurations using the same format. User config gets merged with defaults in code.
+- rename: setting `vscode-ethover.address.lookupUrl` (now configured with `vscode-ethover.chain.config`)
+- rename: setting `vscode-ethover.apikey` (and `apiurl`) to `vscode-ethover.default.apikey` (used for action links (bytecode etc.))
+- add: action bloxy.info
+
+![image](https://user-images.githubusercontent.com/2865694/143015504-fbfea586-4baa-44a7-84c3-dbf8a988838c.png)
+
+![image](https://user-images.githubusercontent.com/2865694/143015659-2899cf99-5eb5-4df1-8d2e-b14a12e39510.png)
+
+![image](https://user-images.githubusercontent.com/2865694/143015924-57fcbba1-74c8-4abd-9f8c-846daad588dd.png)
+
+
 ## 0.0.6
 - new: enable ethover for python files - #5
 
