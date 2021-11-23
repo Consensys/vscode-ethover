@@ -23,7 +23,7 @@ class TimeoutCache {
     }
 
     get(prefix, key, def){
-        return this.data[`${prefix}+${key}`] || def;
+        return this.data[`${prefix}+${key}`] !== undefined ? this.data[`${prefix}+${key}`] : def;
     }
 }
 

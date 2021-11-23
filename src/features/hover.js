@@ -128,7 +128,8 @@ async function provideBalanceHover(document, position, token) {
         //cconf.name, enabled
 
         try {
-            if(!balance){
+            
+            if(balance === undefined){
                 let etherscan = new EtherScanIo(cconf.apiKey, cconf.apiurl);
                 balance = await etherscan.balanceForAddress(address);
                 //balance = await etherscan.api.account.balance(address); //etherscanapi does not support custom chains
