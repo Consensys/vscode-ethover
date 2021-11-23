@@ -23,6 +23,10 @@ class EtherScanIoConnector {
         return this.etherscanRequest("module=proxy&action=eth_getCode&tag=latest&address=" + address);
     }
 
+    balanceForAddress(address) {
+        return this.etherscanRequest("module=account&action=balance&address=" + address + "&tag=latest");
+    }
+
     etherscanRequest(cmd) {
         return new Promise((resolve, reject) => {
             http.get(`${this.apiurl}?apikey=${this.apikey}&${cmd}`, (res) => {

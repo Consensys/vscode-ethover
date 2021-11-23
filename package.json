@@ -125,7 +125,11 @@
                 },
                 "vscode-ethover.hover.getBalance": {
                     "type": "string",
-                    "enum": ["yes", "no", "yes-ask"],
+                    "enum": [
+                        "yes",
+                        "no",
+                        "yes-ask"
+                    ],
                     "description": "Fetch mainnet balance from etherscan.io? (Note: might require a valid ApiKey)",
                     "default": "yes-ask"
                 },
@@ -146,7 +150,7 @@
                             "enabled": true,
                             "apiurl": "https://api-ropsten.etherscan.io/api",
                             "apikey": "YourApiKeyToken",
-                            "url": "https://etherscan.io/address/{address}"
+                            "url": "https://ropsten.etherscan.io/address/{address}"
                         },
                         "kovan": {
                             "name": "Kovan",
@@ -165,20 +169,18 @@
                         "polygon": {
                             "name": "Polygon",
                             "enabled": true,
-                            "apiurl": "https://api-polygon.etherscan.io/api",
+                            "apiurl": "https://api.polygonscan.com/api",
                             "apikey": "YourApiKeyToken",
                             "url": "https://polygonscan.com/address/{address}"
                         }
-                        
                     }
                 }
-                
             }
         }
     },
     "dependencies": {
         "etherscan-api": "^10.0.5",
         "evm": "^0.2.0",
-        "table": "^5.4.6"
+        "table": "^6.7.3"
     }
 }

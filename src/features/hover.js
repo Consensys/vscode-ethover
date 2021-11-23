@@ -130,18 +130,25 @@ async function provideBalanceHover(document, position, token) {
         try {
             if(!balance){
                 let etherscan = new EtherScanIo(cconf.apiKey, cconf.apiurl);
-
-                balance = await etherscan.api.account.balance(address);
+                balance = await etherscan.balanceForAddress(address);
+                //balance = await etherscan.api.account.balance(address); //etherscanapi does not support custom chains
+                balance = parseInt(balance);
+                if(Number.isNaN(balance)){
+                    throw new Error(balance); //is an errormsg
+                }
                 CACHE.set(`balance_${cconf.name}`, address, balance);
             }
             addressHover.push(`([${cconf.name}](${cconf.url.replace("{address}",address)}))`);
-            totalBalance += balance.result;
+            totalBalance += balance;
         } catch(e) {
             errors.push(`Error: ${cconf.name} (\`${e}\`)`);
         }
     }
 
     addressHover.unshift(`∑ 💰 **${(totalBalance/ONE_ETH).toFixed(2)}** Ether `)
+    if(errors.length){
+        addressHover.push(`(\`rate limit error, try again\`)`);
+    }
 
     if(hoverEnabled=="yes-ask"){
         addressHover.push(` |  ([settings](${makeCommandUri('workbench.action.openSettings', `vscode-ethover.hover.getBalance`)}))`);
