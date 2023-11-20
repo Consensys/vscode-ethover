@@ -23,6 +23,7 @@ const DOC_SELECTOR = [
     { language: "javascript" },
     { language: "typescript" },
     { language: "python" },
+    { language: "vyper" },
 ];
 
 function openEvmTrace(uri) {

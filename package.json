@@ -5,6 +5,7 @@
     "version": "0.0.7",
     "keywords": [
         "solidity",
+        "vyper",
         "ethereum",
         "etherscan",
         "hover",
