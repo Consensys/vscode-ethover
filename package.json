@@ -1,186 +1,186 @@
 {
-    "name": "vscode-ethover",
-    "displayName": "ETHover",
-    "description": "Ethereum Account Address Hover Info and Actions",
-    "version": "0.0.7",
-    "keywords": [
-        "solidity",
-        "ethereum",
-        "etherscan",
-        "hover",
-        "address",
-        "disassembler",
-        "decompiler",
-        "evm"
+  "name": "vscode-ethover",
+  "displayName": "ETHover",
+  "description": "Ethereum Account Address Hover Info and Actions",
+  "version": "0.0.8",
+  "keywords": [
+    "solidity",
+    "ethereum",
+    "etherscan",
+    "hover",
+    "address",
+    "disassembler",
+    "decompiler",
+    "evm"
+  ],
+  "publisher": "tintinweb",
+  "icon": "images/ethover.png",
+  "engines": {
+    "vscode": "^1.46.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "bugs": {
+    "url": "https://github.com/ConsenSys/vscode-ethover/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ConsenSys/vscode-ethover"
+  },
+  "main": "./src/extension.js",
+  "activationEvents": [
+    "onLanguage:solidity",
+    "onLanguage:typescript",
+    "onLanguage:javascript",
+    "onLanguage:markdown",
+    "onLanguage:python",
+    "onLanguage:evmtrace",
+    "onLanguage:evmbytecode",
+    "onCommand:vscode-ethover.account.getCode",
+    "onCommand:vscode-ethover.ui.getByteCode",
+    "onCommand:vscode-ethover.ui.getVerifiedSource",
+    "onCommand:vscode-ethover.ui.getDecompiledSourceCode",
+    "onCommand:vscode-ethover.ui.eveem.getDecompiledSourceCode",
+    "onCommand:vscode-ethover.ui.evmjs.getDecompiledSourceCode",
+    "onCommand:vscode-ethover.ui.getDisassembledByteCode",
+    "onCommand:vscode-ethover.activeFile.getDisassembledByteCode",
+    "onCommand:vscode-ethover.activeFile.evmjs.getDecompiledByteCode"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "evmtrace",
+        "extensions": [
+          ".evmtrace"
+        ]
+      },
+      {
+        "id": "evmbytecode",
+        "extensions": [
+          ".evm"
+        ]
+      }
     ],
-    "publisher": "tintinweb",
-    "icon": "images/ethover.png",
-    "engines": {
-        "vscode": "^1.46.0"
-    },
-    "categories": [
-        "Other"
+    "commands": [
+      {
+        "command": "vscode-ethover.account.getCode",
+        "title": "API: Get contract source for address",
+        "category": "ETHover"
+      },
+      {
+        "command": "vscode-ethover.ui.getByteCode",
+        "title": "Fetch Contract ByteCode",
+        "category": "ETHover"
+      },
+      {
+        "command": "vscode-ethover.ui.getVerifiedSource",
+        "title": "Fetch Contract Source Code",
+        "category": "ETHover"
+      },
+      {
+        "command": "vscode-ethover.ui.getDecompiledSourceCode",
+        "title": "Fetch ByteCode and decompile it",
+        "category": "ETHover"
+      },
+      {
+        "command": "vscode-ethover.ui.eveem.getDecompiledSourceCode",
+        "title": "Fetch Contract Source from eveem.org",
+        "category": "ETHover"
+      },
+      {
+        "command": "vscode-ethover.ui.evmjs.getDecompiledSourceCode",
+        "title": "Fetch ByteCode and decompile it (evm.js)",
+        "category": "ETHover"
+      },
+      {
+        "command": "vscode-ethover.ui.getDisassembledByteCode",
+        "title": "Fetch Contract Disassembly",
+        "category": "ETHover"
+      },
+      {
+        "command": "vscode-ethover.activeFile.getDisassembledByteCode",
+        "title": "Disassemble ByteCode from Active File",
+        "category": "ETHover"
+      },
+      {
+        "command": "vscode-ethover.activeFile.evmjs.getDecompiledByteCode",
+        "title": "Decompile ByteCode from Active File",
+        "category": "ETHover"
+      }
     ],
-    "bugs": {
-        "url": "https://github.com/ConsenSys/vscode-ethover/issues"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/ConsenSys/vscode-ethover"
-    },
-    "main": "./src/extension.js",
-    "activationEvents": [
-        "onLanguage:solidity",
-        "onLanguage:typescript",
-        "onLanguage:javascript",
-        "onLanguage:markdown",
-        "onLanguage:python",
-        "onLanguage:evmtrace",
-        "onLanguage:evmbytecode",
-        "onCommand:vscode-ethover.account.getCode",
-        "onCommand:vscode-ethover.ui.getByteCode",
-        "onCommand:vscode-ethover.ui.getVerifiedSource",
-        "onCommand:vscode-ethover.ui.getDecompiledSourceCode",
-        "onCommand:vscode-ethover.ui.eveem.getDecompiledSourceCode",
-        "onCommand:vscode-ethover.ui.evmjs.getDecompiledSourceCode",
-        "onCommand:vscode-ethover.ui.getDisassembledByteCode",
-        "onCommand:vscode-ethover.activeFile.getDisassembledByteCode",
-        "onCommand:vscode-ethover.activeFile.evmjs.getDecompiledByteCode"
-    ],
-    "contributes": {
-        "languages": [
-            {
-                "id": "evmtrace",
-                "extensions": [
-                    ".evmtrace"
-                ]
+    "configuration": {
+      "type": "object",
+      "title": "ETHover",
+      "properties": {
+        "vscode-ethover.default.apiurl": {
+          "type": "string",
+          "description": "The etherscan.io API endpoint to use.",
+          "default": "https://api.etherscan.io/api"
+        },
+        "vscode-ethover.default.apikey": {
+          "type": "string",
+          "description": "Your etherscan.io API key used when fetching Contract Source or Bytecode from etherscan.io.",
+          "default": "YourApiKeyToken"
+        },
+        "vscode-ethover.hover.getBalance": {
+          "type": "string",
+          "enum": [
+            "yes",
+            "no",
+            "yes-ask"
+          ],
+          "description": "Fetch mainnet balance from etherscan.io? (Note: might require a valid ApiKey)",
+          "default": "yes-ask"
+        },
+        "vscode-ethover.chain.config": {
+          "type": "object",
+          "description": "Multi-Chain Network Configuration. See `package.json - vscode-ethover.chain.config` for how to customize.",
+          "properties": {},
+          "default": {
+            "mainnet": {
+              "name": "Mainnet",
+              "enabled": true,
+              "apiurl": "https://api.etherscan.io/api",
+              "apikey": "YourApiKeyToken",
+              "url": "https://etherscan.io/address/{address}"
             },
-            {
-                "id": "evmbytecode",
-                "extensions": [
-                    ".evm"
-                ]
+            "ropsten": {
+              "name": "Ropsten",
+              "enabled": true,
+              "apiurl": "https://api-ropsten.etherscan.io/api",
+              "apikey": "YourApiKeyToken",
+              "url": "https://ropsten.etherscan.io/address/{address}"
+            },
+            "kovan": {
+              "name": "Kovan",
+              "enabled": true,
+              "apiurl": "https://api-kovan.etherscan.io/api",
+              "apikey": "YourApiKeyToken",
+              "url": "https://kovan.etherscan.io/address/{address}"
+            },
+            "rinkeby": {
+              "name": "Rinkeby",
+              "enabled": true,
+              "apiurl": "https://api-rinkeby.etherscan.io/api",
+              "apikey": "YourApiKeyToken",
+              "url": "https://rinkeby.etherscan.io/address/{address}"
+            },
+            "polygon": {
+              "name": "Polygon",
+              "enabled": true,
+              "apiurl": "https://api.polygonscan.com/api",
+              "apikey": "YourApiKeyToken",
+              "url": "https://polygonscan.com/address/{address}"
             }
-        ],
-        "commands": [
-            {
-                "command": "vscode-ethover.account.getCode",
-                "title": "API: Get contract source for address",
-                "category": "ETHover"
-            },
-            {
-                "command": "vscode-ethover.ui.getByteCode",
-                "title": "Fetch Contract ByteCode",
-                "category": "ETHover"
-            },
-            {
-                "command": "vscode-ethover.ui.getVerifiedSource",
-                "title": "Fetch Contract Source Code",
-                "category": "ETHover"
-            },
-            {
-                "command": "vscode-ethover.ui.getDecompiledSourceCode",
-                "title": "Fetch ByteCode and decompile it",
-                "category": "ETHover"
-            },
-            {
-                "command": "vscode-ethover.ui.eveem.getDecompiledSourceCode",
-                "title": "Fetch Contract Source from eveem.org",
-                "category": "ETHover"
-            },
-            {
-                "command": "vscode-ethover.ui.evmjs.getDecompiledSourceCode",
-                "title": "Fetch ByteCode and decompile it (evm.js)",
-                "category": "ETHover"
-            },
-            {
-                "command": "vscode-ethover.ui.getDisassembledByteCode",
-                "title": "Fetch Contract Disassembly",
-                "category": "ETHover"
-            },
-            {
-                "command": "vscode-ethover.activeFile.getDisassembledByteCode",
-                "title": "Disassemble ByteCode from Active File",
-                "category": "ETHover"
-            },
-            {
-                "command": "vscode-ethover.activeFile.evmjs.getDecompiledByteCode",
-                "title": "Decompile ByteCode from Active File",
-                "category": "ETHover"
-            }
-        ],
-        "configuration": {
-            "type": "object",
-            "title": "ETHover",
-            "properties": {
-                "vscode-ethover.default.apiurl": {
-                    "type": "string",
-                    "description": "The etherscan.io API endpoint to use.",
-                    "default": "https://api.etherscan.io/api"
-                },
-                "vscode-ethover.default.apikey": {
-                    "type": "string",
-                    "description": "Your etherscan.io API key used when fetching Contract Source or Bytecode from etherscan.io.",
-                    "default": "YourApiKeyToken"
-                },
-                "vscode-ethover.hover.getBalance": {
-                    "type": "string",
-                    "enum": [
-                        "yes",
-                        "no",
-                        "yes-ask"
-                    ],
-                    "description": "Fetch mainnet balance from etherscan.io? (Note: might require a valid ApiKey)",
-                    "default": "yes-ask"
-                },
-                "vscode-ethover.chain.config": {
-                    "type": "object",
-                    "description": "Multi-Chain Network Configuration. See `package.json - vscode-ethover.chain.config` for how to customize.",
-                    "properties": {},
-                    "default": {
-                        "mainnet": {
-                            "name": "Mainnet",
-                            "enabled": true,
-                            "apiurl": "https://api.etherscan.io/api",
-                            "apikey": "YourApiKeyToken",
-                            "url": "https://etherscan.io/address/{address}"
-                        },
-                        "ropsten": {
-                            "name": "Ropsten",
-                            "enabled": true,
-                            "apiurl": "https://api-ropsten.etherscan.io/api",
-                            "apikey": "YourApiKeyToken",
-                            "url": "https://ropsten.etherscan.io/address/{address}"
-                        },
-                        "kovan": {
-                            "name": "Kovan",
-                            "enabled": true,
-                            "apiurl": "https://api-kovan.etherscan.io/api",
-                            "apikey": "YourApiKeyToken",
-                            "url": "https://kovan.etherscan.io/address/{address}"
-                        },
-                        "rinkeby": {
-                            "name": "Rinkeby",
-                            "enabled": true,
-                            "apiurl": "https://api-rinkeby.etherscan.io/api",
-                            "apikey": "YourApiKeyToken",
-                            "url": "https://rinkeby.etherscan.io/address/{address}"
-                        },
-                        "polygon": {
-                            "name": "Polygon",
-                            "enabled": true,
-                            "apiurl": "https://api.polygonscan.com/api",
-                            "apikey": "YourApiKeyToken",
-                            "url": "https://polygonscan.com/address/{address}"
-                        }
-                    }
-                }
-            }
+          }
         }
-    },
-    "dependencies": {
-        "etherscan-api": "^10.0.5",
-        "evm": "^0.2.0",
-        "table": "^6.7.3"
+      }
     }
+  },
+  "dependencies": {
+    "etherscan-api": "^10.0.5",
+    "evm": "^0.2.0",
+    "table": "^6.7.3"
+  }
 }
