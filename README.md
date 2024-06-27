@@ -35,6 +35,8 @@ Hover over an ethereum address and:
 * JavaScript
 * Markdown
 * Solidity
+* Python
+* Vyper
 
 Let me know if you want to enable this extension for more filetypes.
 
