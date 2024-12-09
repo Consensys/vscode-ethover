@@ -181,5 +181,6 @@
         "etherscan-api": "^10.3.0",
         "evm": "^0.2.0",
         "table": "^6.7.3"
-    }
+    },
+    "license": "MIT"
 }
