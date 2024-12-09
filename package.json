@@ -2,7 +2,7 @@
     "name": "vscode-ethover",
     "displayName": "ETHover",
     "description": "Ethereum Account Address Hover Info and Actions",
-    "version": "0.0.7",
+    "version": "0.0.8",
     "keywords": [
         "solidity",
         "vyper",
@@ -17,7 +17,7 @@
     "publisher": "tintinweb",
     "icon": "images/ethover.png",
     "engines": {
-        "vscode": "^1.46.0"
+        "vscode": "^1.75.0"
     },
     "categories": [
         "Other"
@@ -38,15 +38,7 @@
         "onLanguage:python",
         "onLanguage:evmtrace",
         "onLanguage:evmbytecode",
-        "onCommand:vscode-ethover.account.getCode",
-        "onCommand:vscode-ethover.ui.getByteCode",
-        "onCommand:vscode-ethover.ui.getVerifiedSource",
-        "onCommand:vscode-ethover.ui.getDecompiledSourceCode",
-        "onCommand:vscode-ethover.ui.eveem.getDecompiledSourceCode",
-        "onCommand:vscode-ethover.ui.evmjs.getDecompiledSourceCode",
-        "onCommand:vscode-ethover.ui.getDisassembledByteCode",
-        "onCommand:vscode-ethover.activeFile.getDisassembledByteCode",
-        "onCommand:vscode-ethover.activeFile.evmjs.getDecompiledByteCode"
+        "onLanguage:vyper"
     ],
     "contributes": {
         "languages": [
@@ -134,6 +126,11 @@
                     "description": "Fetch mainnet balance from etherscan.io? (Note: might require a valid ApiKey)",
                     "default": "yes-ask"
                 },
+                "vscode-ethover.hover.getBalance.showErrors": {
+                    "type": "boolean",
+                    "description": "Show getBalance Errors in hover text.",
+                    "default": false
+                },
                 "vscode-ethover.chain.config": {
                     "type": "object",
                     "description": "Multi-Chain Network Configuration. See `package.json - vscode-ethover.chain.config` for how to customize.",
@@ -146,26 +143,26 @@
                             "apikey": "YourApiKeyToken",
                             "url": "https://etherscan.io/address/{address}"
                         },
-                        "ropsten": {
-                            "name": "Ropsten",
+                        "goerli": {
+                            "name": "Goerly",
                             "enabled": true,
-                            "apiurl": "https://api-ropsten.etherscan.io/api",
+                            "apiurl": "https://api-goerli.etherscan.io/api",
                             "apikey": "YourApiKeyToken",
-                            "url": "https://ropsten.etherscan.io/address/{address}"
+                            "url": "https://goerli.etherscan.io/address/{address}"
                         },
-                        "kovan": {
-                            "name": "Kovan",
+                        "sepolia": {
+                            "name": "Sepolia",
                             "enabled": true,
-                            "apiurl": "https://api-kovan.etherscan.io/api",
+                            "apiurl": "https://api-sepolia.etherscan.io/api",
                             "apikey": "YourApiKeyToken",
-                            "url": "https://kovan.etherscan.io/address/{address}"
+                            "url": "https://sepolia.etherscan.io/address/{address}"
                         },
-                        "rinkeby": {
-                            "name": "Rinkeby",
+                        "holesky": {
+                            "name": "Holesky",
                             "enabled": true,
-                            "apiurl": "https://api-rinkeby.etherscan.io/api",
+                            "apiurl": "https://api-holesky.etherscan.io/api",
                             "apikey": "YourApiKeyToken",
-                            "url": "https://rinkeby.etherscan.io/address/{address}"
+                            "url": "https://holesky.etherscan.io/address/{address}"
                         },
                         "polygon": {
                             "name": "Polygon",
@@ -180,7 +177,7 @@
         }
     },
     "dependencies": {
-        "etherscan-api": "^10.0.5",
+        "etherscan-api": "^10.3.0",
         "evm": "^0.2.0",
         "table": "^6.7.3"
     }
