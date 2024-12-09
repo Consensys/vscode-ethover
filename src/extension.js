@@ -24,6 +24,7 @@ const DOC_SELECTOR = [
     { language: "typescript" },
     { language: "python" },
     { language: "vyper" },
+    { language: "json" }
 ];
 
 function openEvmTrace(uri) {
