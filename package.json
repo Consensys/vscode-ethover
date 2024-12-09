@@ -38,7 +38,8 @@
         "onLanguage:python",
         "onLanguage:evmtrace",
         "onLanguage:evmbytecode",
-        "onLanguage:vyper"
+        "onLanguage:vyper",
+        "onLanguage:json"
     ],
     "contributes": {
         "languages": [
