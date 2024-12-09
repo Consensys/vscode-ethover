@@ -2,6 +2,8 @@
 <sup>
 [[  🌐  ](https://diligence.consensys.net)  [  📩  ](mailto:diligence@consensys.net)  [  🔥  ](https://consensys.github.io/diligence/)]
 </sup><br/><br/>
+[<img height="30" alt="vscode marketplace" src="https://github.com/user-attachments/assets/030dde14-1745-4f4e-852c-b415db9c2050">](https://marketplace.visualstudio.com/items?itemName=tintinweb.vscode-ethover) [<img height="30" alt="open-vsx" src="https://github.com/user-attachments/assets/975d31ca-5259-4bf0-8c40-b2e25cdd5ccb">](https://open-vsx.org/extension/tintinweb/vscode-ethover) 
+
 
 
 
@@ -37,6 +39,7 @@ Hover over an ethereum address and:
 * Solidity
 * Python
 * Vyper
+* JSON
 
 Let me know if you want to enable this extension for more filetypes.
 
